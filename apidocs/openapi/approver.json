@@ -1,0 +1,139 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "c4smra5wmajyy"
+  },
+  "info": {
+    "title": "approver",
+    "version": "1.0",
+    "description": "API to approve Amplify markeplace Product Subscriptions",
+    "contact": {
+      "name": "Leor Brenman",
+      "email": "lbrenman99@hotmail.com",
+      "url": "https://www.leorbrenman.com"
+    },
+    "license": {
+      "name": "NA",
+      "url": "https://www.leorbrenman.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api",
+      "description": "Local"
+    }
+  ],
+  "paths": {
+    "/approver": {
+      "post": {
+        "summary": "",
+        "operationId": "post-approver",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "nullable": true
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "approver"
+        ],
+        "description": "approver",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "comment": {
+                    "type": "string"
+                  },
+                  "approvalStatus": {
+                    "type": "string"
+                  },
+                  "selfLink": {
+                    "type": "string"
+                  },
+                  "subscriptionName": {
+                    "type": "string"
+                  },
+                  "productName": {
+                    "type": "string"
+                  },
+                  "requestorName": {
+                    "type": "string"
+                  },
+                  "requestorEmail": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "comment": "Your request was approved",
+                    "approvalStatus": "approved",
+                    "selfLink": "https://apicentral.axway.com/apis/catalog/v1alpha1/subscriptions/default-team-subscription-for-watchlist-2-1/approval",
+                    "subscriptionName": "Default Team - subscription for Watchlist 2 - 1",
+                    "productName": "watchlist-2",
+                    "requestorName": "Leor Brenman",
+                    "requestorEmail": "leor.brenman@gmail.com"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "apiKey": {
+        "name": "apiKey",
+        "type": "apiKey",
+        "in": "header"
+      }
+    }
+  },
+  "security": [
+    {
+      "apiKey": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "approver",
+      "description": "approver"
+    }
+  ]
+}
