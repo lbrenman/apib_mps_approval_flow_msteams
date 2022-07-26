@@ -102,7 +102,7 @@
 			"outputs": {
 				"true": {
 					"routes": [
-						"javascript.2"
+						"logger.1"
 					],
 					"context": "$.equals",
 					"metaName": "True"
@@ -132,7 +132,9 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let approverUrl='https://webhook.site/c055b88b-0fbd-441c-81ca-bc19b0249995';\\n  let productName='a';\\n  let productUrl='https://www.google.com';\\n  let subscriptionName='b';\\n  let subscriptionUrl='https://www.google.com';\\n  let requestorName='c';\\n  let requestorUrl='https://www.google.com';\\n  let requestorEmail='d';\\n  let requestorEmailUrl='https://www.google.com';\\n  let selfLink='https://www.google.com';\\n  \\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n          \\t\\\"value\\\": \\\"[\\\"+productName+\\\"](\\\"+productUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": \\\"[\\\"+subscriptionName+\\\"](\\\"+subscriptionUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorName+\\\"](\\\"+requestorUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorEmail+\\\"](\\\"+requestorEmailUrl+\\\")\\\"\\n        }],\\n    }],\\n    \\\"potentialAction\\\": [{\\n        \\\"@type\\\": \\\"ActionCard\\\",\\n        \\\"name\\\": \\\"Comment\\\",\\n        \\\"inputs\\\": [{\\n            \\\"@type\\\": \\\"TextInput\\\",\\n            \\\"id\\\": \\\"comment\\\",\\n            \\\"isMultiline\\\": false,\\n            \\\"title\\\": \\\"Please enter any comments\\\"\\n        }],\\n        \\\"actions\\\": [{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Approve\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        },{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Reject\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        }]\\n     }]\\n   };\\n  \\n  return {url,body};\""
+					"value": "\"let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let approverUrl='https://webhook.site/c055b88b-0fbd-441c-81ca-bc19b0249995';\\n  let productName='a';\\n  let productUrl='https://www.google.com';\\n  let subscriptionName='b';\\n  let subscriptionUrl='https://www.google.com';\\n  let requestorName='c';\\n  let requestorUrl='https://www.google.com';\\n  let requestorEmail='d';\\n  let requestorEmailUrl='https://www.google.com';\\n  let selfLink='https://www.google.com';\\n  \\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n          \\t\\\"value\\\": \\\"[\\\"+productName+\\\"](\\\"+productUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": \\\"[\\\"+subscriptionName+\\\"](\\\"+subscriptionUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorName+\\\"](\\\"+requestorUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorEmail+\\\"](\\\"+requestorEmailUrl+\\\")\\\"\\n        }],\\n    }],\\n    \\\"potentialAction\\\": [{\\n        \\\"@type\\\": \\\"ActionCard\\\",\\n        \\\"name\\\": \\\"Comment\\\",\\n        \\\"inputs\\\": [{\\n            \\\"@type\\\": \\\"TextInput\\\",\\n            \\\"id\\\": \\\"comment\\\",\\n            \\\"isMultiline\\\": false,\\n            \\\"title\\\": \\\"Please enter any comments\\\"\\n        }],\\n        \\\"actions\\\": [{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Approve\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        },{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Reject\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        }]\\n     }]\\n   };\\n  \\n  return {url,body};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
 				}
 			],
 			"outputs": {
@@ -209,6 +211,30 @@
 				}
 			},
 			"metaMethod": "POST"
+		},
+		"logger.1": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-logger/logger",
+			"name": "Log Subscription Webhook Payload",
+			"method": "log",
+			"parameters": [
+				{
+					"name": "message",
+					"type": "jsonpath",
+					"value": "$.request.body"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": null,
+					"routes": [
+						"javascript.2"
+					]
+				},
+				"error": {
+					"context": "$.error",
+					"routes": []
+				}
+			}
 		}
 	}
 }
