@@ -132,9 +132,7 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let approverUrl='https://webhook.site/c055b88b-0fbd-441c-81ca-bc19b0249995';\\n  let productName='a';\\n  let productUrl='https://www.google.com';\\n  let subscriptionName='b';\\n  let subscriptionUrl='https://www.google.com';\\n  let requestorName='c';\\n  let requestorUrl='https://www.google.com';\\n  let requestorEmail='d';\\n  let requestorEmailUrl='https://www.google.com';\\n  let selfLink='https://www.google.com';\\n  \\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n          \\t\\\"value\\\": \\\"[\\\"+productName+\\\"](\\\"+productUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": \\\"[\\\"+subscriptionName+\\\"](\\\"+subscriptionUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorName+\\\"](\\\"+requestorUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorEmail+\\\"](\\\"+requestorEmailUrl+\\\")\\\"\\n        }],\\n    }],\\n    \\\"potentialAction\\\": [{\\n        \\\"@type\\\": \\\"ActionCard\\\",\\n        \\\"name\\\": \\\"Comment\\\",\\n        \\\"inputs\\\": [{\\n            \\\"@type\\\": \\\"TextInput\\\",\\n            \\\"id\\\": \\\"comment\\\",\\n            \\\"isMultiline\\\": false,\\n            \\\"title\\\": \\\"Please enter any comments\\\"\\n        }],\\n        \\\"actions\\\": [{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Approve\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        },{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Reject\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        }]\\n     }]\\n   };\\n  \\n  return {url,body};\"",
-					"metaName": "Code",
-					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+					"value": "\"let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let approverUrl='https://webhook.site/c055b88b-0fbd-441c-81ca-bc19b0249995';\\n  let productName=data.request.body.payload.spec.product;\\n  let productUrl=data.env.API_CENTRAL_URL+'/products/details/'+data.request.body.payload.spec.product;\\n  let subscriptionName=data.request.body.payload.title;\\n  let subscriptionUrl=data.env.API_CENTRAL_URL+'/marketplace/subscriptions';\\n  let requestorName=data.response.body.result.firstname+' '+data.response.body.result.lastname;\\n  let requestorEmail=data.response.body.result.email;\\n  let requestorEmailUrl='mailTo:'+data.response.body.result.email;\\n  let selfLink = data.env.API_CENTRAL_URL+'/apis'+data.request.body.payload.metadata.selfLink+'/approval';\\n  \\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n          \\t\\\"value\\\": \\\"[\\\"+productName+\\\"](\\\"+productUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": \\\"[\\\"+subscriptionName+\\\"](\\\"+subscriptionUrl+\\\")\\\"\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": requestorName\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": \\\"[\\\"+requestorEmail+\\\"](\\\"+requestorEmailUrl+\\\")\\\"\\n        }],\\n    }],\\n    \\\"potentialAction\\\": [{\\n        \\\"@type\\\": \\\"ActionCard\\\",\\n        \\\"name\\\": \\\"Comment\\\",\\n        \\\"inputs\\\": [{\\n            \\\"@type\\\": \\\"TextInput\\\",\\n            \\\"id\\\": \\\"comment\\\",\\n            \\\"isMultiline\\\": false,\\n            \\\"title\\\": \\\"Please enter any comments\\\"\\n        }],\\n        \\\"actions\\\": [{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Approve\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        },{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Reject\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        }]\\n     }]\\n   };\\n  \\n  return {url,body};\""
 				}
 			],
 			"outputs": {
@@ -220,21 +218,207 @@
 				{
 					"name": "message",
 					"type": "jsonpath",
-					"value": "$.request.body"
+					"value": "$.request.body",
+					"metaName": "Message",
+					"metaDescription": "The log message."
 				}
 			],
 			"outputs": {
 				"next": {
 					"context": null,
 					"routes": [
-						"javascript.2"
-					]
+						"javascript.4"
+					],
+					"metaName": "Next"
 				},
 				"error": {
 					"context": "$.error",
-					"routes": []
+					"routes": [],
+					"metaName": "Error"
 				}
-			}
+			},
+			"metaMethod": "Log Message"
+		},
+		"javascript.3": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
+			"name": "prepareGetUser",
+			"method": "Execute",
+			"parameters": [
+				{
+					"name": "data",
+					"type": "jsonpath",
+					"value": "$",
+					"metaName": "Data",
+					"metaDescription": "The value to apply as the `data` argument of the JavaScript code. For objects and arrays, `data` is passed by reference."
+				},
+				{
+					"name": "code",
+					"type": "string",
+					"value": "\"let userId = data.request.body.payload.metadata.audit.createUserId;\\n  let url = 'https://platform.axway.com/api/v1/user/'+userId;\\n  let headers = {\\n    'Content-Type': 'application/json',\\n    Authorization: 'Bearer '+data.getTokenResponse.body.access_token\\n  };\\n  return {url,headers};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.result",
+					"routes": [
+						"rest.2"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Execute"
+		},
+		"rest.2": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-restclient/rest",
+			"name": "getUser",
+			"method": "get",
+			"parameters": [
+				{
+					"name": "url",
+					"type": "jsonpath",
+					"value": "$.result.url",
+					"metaName": "URL",
+					"metaDescription": "The target URL."
+				},
+				{
+					"name": "headers",
+					"type": "jsonpath",
+					"value": "$.result.headers",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
+				}
+			],
+			"outputs": {
+				"2xx": {
+					"routes": [
+						"javascript.2"
+					],
+					"context": "$.response",
+					"metaName": "2XX"
+				},
+				"3xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "3XX"
+				},
+				"4xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "4XX"
+				},
+				"5xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "5XX"
+				},
+				"error": {
+					"routes": [],
+					"context": "$.error",
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "GET"
+		},
+		"javascript.4": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
+			"name": "prepareGetToken",
+			"method": "Execute",
+			"parameters": [
+				{
+					"name": "code",
+					"type": "string",
+					"value": "\"let dataToencode = data.env.CLIENT_ID+':'+data.env.CLIENT_SECRET;\\n  let buff = new Buffer(dataToencode);\\n  let encodedData = buff.toString('base64');\\n  \\n  let url = 'https://login.axway.com/auth/realms/Broker/protocol/openid-connect/token';\\n  let headers = {\\n    Authorization : 'Basic '+encodedData,\\n    'Content-Type': 'application/x-www-form-urlencoded'\\n  };\\n  let body = {\\n    grant_type: 'client_credentials'\\n  };\\n  \\n  return {url,headers,body};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+				},
+				{
+					"name": "data",
+					"type": "jsonpath",
+					"value": "$",
+					"metaName": "Data",
+					"metaDescription": "The value to apply as the `data` argument of the JavaScript code. For objects and arrays, `data` is passed by reference."
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.result",
+					"routes": [
+						"rest.3"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Execute"
+		},
+		"rest.3": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-restclient/rest",
+			"name": "getToken",
+			"method": "post",
+			"parameters": [
+				{
+					"name": "body",
+					"type": "jsonpath",
+					"value": "$.result.body",
+					"metaName": "Body",
+					"metaDescription": "The content to send."
+				},
+				{
+					"name": "url",
+					"type": "jsonpath",
+					"value": "$.result.url",
+					"metaName": "URL",
+					"metaDescription": "The target URL."
+				},
+				{
+					"name": "headers",
+					"type": "jsonpath",
+					"value": "$.result.headers",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
+				}
+			],
+			"outputs": {
+				"2xx": {
+					"routes": [
+						"javascript.3"
+					],
+					"context": "$.getTokenResponse",
+					"metaName": "2XX"
+				},
+				"3xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "3XX"
+				},
+				"4xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "4XX"
+				},
+				"5xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "5XX"
+				},
+				"error": {
+					"routes": [],
+					"context": "$.error",
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "POST"
 		}
 	}
 }
