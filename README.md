@@ -71,8 +71,9 @@ spec:
       - updated
   webhooks:
     - wh-integrations-for-subscription-approvals
-
 ```
+
+> Note: You need to edit the YAML file above and set the API Builder base address and APIKey in the webhook section
 
 The API Builder flow for `/amplifycentralwebhookhandler` is shown below:
 
