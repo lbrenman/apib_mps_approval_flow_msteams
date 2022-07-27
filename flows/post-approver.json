@@ -472,7 +472,7 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let body = {\\n    text: 'SUBSCRIPTION: \\\"'+data.request.body.subscriptionName+'\\\", for PRODUCT: \\\"'+data.request.body.productName+'\\\" requested by '+data.request.body.requestorName+'('+data.request.body.requestorEmail+') is no longer PENDING. For any changes, please log into the Axway platform at https://platform.axway.com.'\\n  };\\n  \\n  return {url,body};\""
+					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let body = {\\n    text: 'SUBSCRIPTION: \\\"'+data.request.body.subscriptionName+'\\\", for PRODUCT: \\\"'+data.request.body.productName+'\\\" requested by '+data.request.body.requestorName+' ('+data.request.body.requestorEmail+') is no longer PENDING. To make any changes, please log into the Axway platform at https://platform.axway.com.'\\n  };\\n  \\n  return {url,body};\""
 				}
 			],
 			"outputs": {
