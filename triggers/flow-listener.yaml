@@ -1,0 +1,12 @@
+triggers:
+  flow-listener-1:
+    name: Flow Listener
+    parameters:
+      id: getAmplifyAPIHeaders
+    enabled: true
+    invoke:
+      flow: getAmplifyAPIHeaders
+      parameters:
+        request: $.request
+        config: $.config
+        env: $.env
