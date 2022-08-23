@@ -134,7 +134,7 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  let approverUrl=`${data.env.BASEURL}/api/approver`;\\n  let selfLink = `${data.env.API_CENTRAL_URL}/apis${data.request.body.payload.metadata.selfLink}/approval`;\\n  let requestorName=`${data.getUserResponse.body.result.firstname} ${data.getUserResponse.body.result.lastname}`;\\n  let requestorEmail=data.getUserResponse.body.result.email;\\n  let requestorEmailUrl=`mailTo:${data.getUserResponse.body.result.email}`;\\n  let orgName = data.getOrgResponse.body.result.name;\\n  let orgUrl = 'https://platform.axway.com/org/'+data.request.body.organization.id;\\n  let teamName = data.getTeamResponse.body.result.name;\\n  let teamUrl = 'https://platform.axway.com/org/team/'+data.request.body.payload.marketplace.resource.owner.id;\\n  \\n  \\n  let productName=data.request.body.payload.spec.product;\\n  let productUrl=`${data.env.API_CENTRAL_URL}/products/details/${data.request.body.payload.spec.product}`;\\n  let subscriptionName=data.request.body.payload.title;\\n  let subscriptionUrl=`${data.env.API_CENTRAL_URL}/marketplace/subscriptions`;\\n  \\n  \\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n          \\t\\\"value\\\": `[${productName}](${productUrl})`\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": `[${subscriptionName}](${subscriptionUrl})`\\n        },{\\n            \\\"name\\\": \\\"Requestor\\\",\\n            \\\"value\\\": `[${requestorName} (${requestorEmail})](${requestorEmailUrl})`\\n        },{\\n            \\\"name\\\": \\\"Organization\\\",\\n            \\\"value\\\": `[${orgName}](${orgUrl})`\\n        },{\\n            \\\"name\\\": \\\"Team\\\",\\n            \\\"value\\\": `[${teamName}](${teamUrl})`\\n        }],\\n    }],\\n    \\\"potentialAction\\\": [{\\n        \\\"@type\\\": \\\"ActionCard\\\",\\n        \\\"name\\\": \\\"Comment\\\",\\n        \\\"inputs\\\": [{\\n            \\\"@type\\\": \\\"TextInput\\\",\\n            \\\"id\\\": \\\"comment\\\",\\n            \\\"isMultiline\\\": false,\\n            \\\"title\\\": \\\"Please enter any comments\\\"\\n        }],\\n        \\\"actions\\\": [{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Approve\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        },{\\n            \\\"@type\\\": \\\"HttpPOST\\\",\\n            \\\"name\\\": \\\"Reject\\\",\\n            \\\"target\\\": approverUrl,\\n            \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n            \\\"headers\\\": [{\\n            \\t\\\"name\\\": \\\"apiKey\\\",\\n            \\t\\\"value\\\": data.env.API_KEY\\n            }]\\n        }]\\n     }]\\n   };\\n  \\n  return {url,body};\""
+					"value": "\"// Common\\n  let url=data.env.MS_TEAMS_WEBHOOK_URL;\\n  let approverUrl=`${data.env.BASEURL}/api/approver`;\\n  let selfLink = `${data.env.API_CENTRAL_URL}/apis${data.request.body.payload.metadata.selfLink}/approval`;\\n  let requestorName=`${data.getUserResponse.body.result.firstname} ${data.getUserResponse.body.result.lastname}`;\\n  let requestorEmail=data.getUserResponse.body.result.email;\\n  let requestorEmailUrl=`mailTo:${data.getUserResponse.body.result.email}`;\\n  let orgName = data.getOrgResponse.body.result.name;\\n  let orgUrl = 'https://platform.axway.com/org/'+data.request.body.organization.id;\\n  \\n  let body;\\n  \\n  // Product Subscription vars\\n  let productName;\\n  let productUrl;\\n  let subscriptionName;\\n  let subscriptionUrl;\\n  let teamName;\\n  let teamUrl;\\n  \\n  if(data.request.body.payload.kind=='Subscription') {\\n    productName=data.getProductResponse.body.title;\\n    productUrl=`${data.env.API_CENTRAL_URL}/products/details/${data.request.body.payload.spec.product}`;\\n    subscriptionName=data.request.body.payload.title;\\n    subscriptionUrl=`${data.env.API_CENTRAL_URL}/marketplace/subscriptions`;\\n    teamName = data.getTeamResponse.body.result.name;\\n    teamUrl = 'https://platform.axway.com/org/team/'+data.request.body.payload.marketplace.resource.owner.id;\\n    \\n      body = {\\n        \\\"@type\\\": \\\"MessageCard\\\",\\n        \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n        \\\"themeColor\\\": \\\"0076D7\\\",\\n        \\\"summary\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n        \\\"sections\\\": [{\\n            \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval REQUESTED\\\",\\n            \\\"activitySubtitle\\\": \\\"Please review and approve or reject the request\\\",\\n            \\\"markdown\\\": true,\\n            \\\"facts\\\": [{\\n                \\\"name\\\": \\\"Product\\\",\\n                \\\"value\\\": `[${productName}](${productUrl})`\\n            },{\\n                \\\"name\\\": \\\"Subscription\\\",\\n                \\\"value\\\": `[${subscriptionName}](${subscriptionUrl})`\\n            },{\\n                \\\"name\\\": \\\"Requestor\\\",\\n                \\\"value\\\": `[${requestorName} (${requestorEmail})](${requestorEmailUrl})`\\n            },{\\n                \\\"name\\\": \\\"Organization\\\",\\n                \\\"value\\\": `[${orgName}](${orgUrl})`\\n            },{\\n                \\\"name\\\": \\\"Team\\\",\\n                \\\"value\\\": `[${teamName}](${teamUrl})`\\n            }],\\n        }],\\n        \\\"potentialAction\\\": [{\\n            \\\"@type\\\": \\\"ActionCard\\\",\\n            \\\"name\\\": \\\"Comment\\\",\\n            \\\"inputs\\\": [{\\n                \\\"@type\\\": \\\"TextInput\\\",\\n                \\\"id\\\": \\\"comment\\\",\\n                \\\"isMultiline\\\": false,\\n                \\\"title\\\": \\\"Please enter any comments\\\"\\n            }],\\n            \\\"actions\\\": [{\\n                \\\"@type\\\": \\\"HttpPOST\\\",\\n                \\\"name\\\": \\\"Approve\\\",\\n                \\\"target\\\": approverUrl,\\n                \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"approved\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n                \\\"headers\\\": [{\\n                    \\\"name\\\": \\\"apiKey\\\",\\n                    \\\"value\\\": data.env.API_KEY\\n                }]\\n            },{\\n                \\\"@type\\\": \\\"HttpPOST\\\",\\n                \\\"name\\\": \\\"Reject\\\",\\n                \\\"target\\\": approverUrl,\\n                \\\"body\\\": \\\"{\\\\\\\"comment\\\\\\\":\\\\\\\"{{comment.value}}\\\\\\\",\\\\\\\"approvalStatus\\\\\\\":\\\\\\\"rejected\\\\\\\", \\\\\\\"selfLink\\\\\\\":\\\\\\\"\\\"+selfLink+\\\"\\\\\\\",\\\\\\\"subscriptionName\\\\\\\":\\\\\\\"\\\"+subscriptionName+\\\"\\\\\\\",\\\\\\\"productName\\\\\\\":\\\\\\\"\\\"+productName+\\\"\\\\\\\",\\\\\\\"requestorName\\\\\\\":\\\\\\\"\\\"+requestorName+\\\"\\\\\\\",\\\\\\\"requestorEmail\\\\\\\":\\\\\\\"\\\"+requestorEmail+\\\"\\\\\\\"}\\\",\\n                \\\"headers\\\": [{\\n                    \\\"name\\\": \\\"apiKey\\\",\\n                    \\\"value\\\": data.env.API_KEY\\n                }]\\n            }]\\n         }]\\n       };\\n    \\n  } else {\\n    \\n    body = {\\n      \\\"Text\\\": \\\"Asset Request\\\"\\n    };\\n    \\n  }\\n  \\n  return {url,body};\""
 				}
 			],
 			"outputs": {
@@ -403,7 +403,7 @@
 			"outputs": {
 				"2xx": {
 					"routes": [
-						"javascript.5"
+						"condition.2"
 					],
 					"context": "$.getOrgResponse",
 					"metaName": "2XX"
@@ -535,6 +535,139 @@
 				}
 			},
 			"metaMethod": "GET"
+		},
+		"javascript.6": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
+			"name": "prepareGetProduct",
+			"method": "Execute",
+			"parameters": [
+				{
+					"name": "data",
+					"type": "jsonpath",
+					"value": "$",
+					"metaName": "Data",
+					"metaDescription": "The value to apply as the `data` argument of the JavaScript code. For objects and arrays, `data` is passed by reference."
+				},
+				{
+					"name": "code",
+					"type": "string",
+					"value": "\"let productName = data.request.body.payload.spec.product;\\n  let url = `${data.env.API_CENTRAL_URL}/apis/catalog/v1/products/${productName}`;\\n  \\n  return {url};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.result",
+					"routes": [
+						"rest.5"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Execute"
+		},
+		"rest.5": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-restclient/rest",
+			"name": "getProduct",
+			"method": "get",
+			"parameters": [
+				{
+					"name": "url",
+					"type": "jsonpath",
+					"value": "$.result.url",
+					"metaName": "URL",
+					"metaDescription": "The target URL."
+				},
+				{
+					"name": "headers",
+					"type": "jsonpath",
+					"value": "$.getAmplifyAPIHeadersFlowResponse",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
+				}
+			],
+			"outputs": {
+				"2xx": {
+					"routes": [
+						"javascript.5"
+					],
+					"context": "$.getProductResponse",
+					"metaName": "2XX"
+				},
+				"3xx": {
+					"routes": [
+						"http.1"
+					],
+					"context": "$.response",
+					"metaName": "3XX"
+				},
+				"4xx": {
+					"routes": [
+						"http.1"
+					],
+					"context": "$.response",
+					"metaName": "4XX"
+				},
+				"5xx": {
+					"routes": [
+						"http.1"
+					],
+					"context": "$.response",
+					"metaName": "5XX"
+				},
+				"error": {
+					"routes": [
+						"http.1"
+					],
+					"context": "$.error",
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "GET"
+		},
+		"condition.2": {
+			"type": "nodehandler://axway-flow/condition",
+			"name": "Equals",
+			"method": "equals",
+			"parameters": [
+				{
+					"name": "source",
+					"type": "jsonpath",
+					"value": "$.request.body.payload.kind",
+					"metaName": "Source",
+					"metaDescription": "The input to test."
+				},
+				{
+					"name": "value",
+					"type": "string",
+					"value": "\"Subscription\"",
+					"metaName": "Value",
+					"metaDescription": "The value to test input against."
+				}
+			],
+			"outputs": {
+				"true": {
+					"routes": [
+						"javascript.6"
+					],
+					"context": "$.equals",
+					"metaName": "True"
+				},
+				"false": {
+					"routes": [
+						"javascript.2"
+					],
+					"context": "$.equals",
+					"metaName": "False"
+				}
+			},
+			"metaMethod": "Equals"
 		}
 	}
 }
