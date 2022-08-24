@@ -456,7 +456,9 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let teamIdl\\n  if(data.request.body.payload.kind === 'Subscription') {\\n    teamId = data.request.body.payload.marketplace.resource.owner.id;\\n  }\\n  \\n  let url = 'https://platform.axway.com/api/v1/team/'+teamId;\\n  \\n  return {url};\""
+					"value": "\"let teamIdl\\n  if(data.request.body.payload.kind === 'Subscription') {\\n    teamId = data.request.body.payload.marketplace.resource.owner.id;\\n  }\\n  \\n  let url = 'https://platform.axway.com/api/v1/team/'+teamId;\\n  \\n  return {url};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
 				}
 			],
 			"outputs": {
@@ -661,13 +663,100 @@
 				},
 				"false": {
 					"routes": [
-						"javascript.2"
+						"javascript.7"
 					],
 					"context": "$.equals",
 					"metaName": "False"
 				}
 			},
 			"metaMethod": "Equals"
+		},
+		"javascript.7": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
+			"name": "prepareGetSubscription",
+			"method": "Execute",
+			"parameters": [
+				{
+					"name": "data",
+					"type": "jsonpath",
+					"value": "$",
+					"metaName": "Data",
+					"metaDescription": "The value to apply as the `data` argument of the JavaScript code. For objects and arrays, `data` is passed by reference."
+				},
+				{
+					"name": "code",
+					"type": "string",
+					"value": "\"let url = `${data.env.API_CENTRAL_URL}/apis${data.request.body.payload.metadata.references.find(c => c.kind == 'Subscription').selfLink}`;\\n  \\n  return {url};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.result",
+					"routes": [
+						"rest.6"
+					],
+					"metaName": "Next"
+				},
+				"error": {
+					"context": "$.error",
+					"routes": [],
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "Execute"
+		},
+		"rest.6": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-restclient/rest",
+			"name": "getSubscription",
+			"method": "get",
+			"parameters": [
+				{
+					"name": "url",
+					"type": "jsonpath",
+					"value": "$.result.url",
+					"metaName": "URL",
+					"metaDescription": "The target URL."
+				},
+				{
+					"name": "headers",
+					"type": "jsonpath",
+					"value": "$.getAmplifyAPIHeadersFlowResponse",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
+				}
+			],
+			"outputs": {
+				"2xx": {
+					"routes": [
+						"javascript.2"
+					],
+					"context": "$.getSubscriptiongetSubscriptionresponse",
+					"metaName": "2XX"
+				},
+				"3xx": {
+					"routes": [],
+					"context": "$.getSubscriptionResponse",
+					"metaName": "3XX"
+				},
+				"4xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "4XX"
+				},
+				"5xx": {
+					"routes": [],
+					"context": "$.response",
+					"metaName": "5XX"
+				},
+				"error": {
+					"routes": [],
+					"context": "$.error",
+					"metaName": "Error"
+				}
+			},
+			"metaMethod": "GET"
 		}
 	}
 }
