@@ -44,8 +44,8 @@ and for an Access Request:
 
 The API Builder project exposes two API's:
 
-* `POST /api/amplifycentralwebhookhandler` which takes an Amplify subscription webhook as the body. This is the webhook that Amplify calls when a marketplace product subscription request is made. Stoplight OAS Document repo is [**here**](https://github.com/lbrenman/amplifycentralwebhookhandlerdefinition)
-* `POST /api/approver` which is called automatically when the approver clicks the approve or reject button in the MS Teams approval form. Stoplight OAS Document repo is [**here**](https://github.com/lbrenman/sl_marketplace_product_subscription_approver_api_def/tree/v2)
+* `POST /api/amplifycentralwebhookhandler` which takes an Amplify subscription webhook as the body. This is the webhook that Amplify calls when a marketplace product subscription or asset access request is made. An Stoplight OAS Document repo can be [**here**](https://github.com/lbrenman/amplifycentralwebhookhandlerdefinition)
+* `POST /api/approver` which is called automatically when the approver clicks the approve or reject button in the MS Teams approval form. An Stoplight OAS Document repo can be found [**here**](https://github.com/lbrenman/sl_marketplace_product_subscription_approver_api_def/tree/v2)
 
 You need to set the following environment variables in your API Builder project (e.g. /conf/.env):
 
@@ -54,7 +54,7 @@ CLIENT_ID=<An Axway service account client ID>
 CLIENT_SECRET=<An Axway service account client Secret>
 API_KEY=<An API Key that you set>
 API_CENTRAL_URL=https://apicentral.axway.com
-MS_TEAMS_WEBHOOK_URL=<MS Teams channel incoing webhook URL>
+MS_TEAMS_WEBHOOK_URL=<MS Teams channel incoming webhook connector URL>
 BASEURL=<The base URL of your deployed API Builder project>
 ```
 
