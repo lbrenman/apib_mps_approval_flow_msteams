@@ -36,7 +36,9 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url = data.request.body.selfLink;\\n  let body = {\\n      \\\"approval\\\": {\\n      \\\"state\\\": data.request.body.approvalStatus,\\n      \\\"reason\\\": data.request.body.comment\\n      }\\n  };\\n  return {url,body};\""
+					"value": "\"console.log(data.request.body);\\n  \\n  let url = data.request.body.selfLink;\\n  \\n  let body;\\n  \\n  if(data.request.body.kind==='Subscription') {\\n    body = {\\n        \\\"approval\\\": {\\n          \\\"state\\\": data.request.body.approvalStatus,\\n          \\\"reason\\\": data.request.body.comment\\n        }\\n    };\\n  } else {\\n    body = {\\n        \\\"approval\\\": {\\n          \\\"state\\\": \\n          \\t{\\n              \\\"name\\\": data.request.body.approvalStatus,\\n\\t          \\\"reason\\\": data.request.body.comment\\n            }\\n        }\\n    };\\n  }\\n  \\n  return {url,body};\"",
+					"metaName": "Code",
+					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
 				}
 			],
 			"outputs": {
@@ -77,7 +79,9 @@
 				{
 					"name": "headers",
 					"type": "jsonpath",
-					"value": "$.getAmplifyAPIHeadersFlowResponse"
+					"value": "$.getAmplifyAPIHeadersFlowResponse",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
 				}
 			],
 			"outputs": {
@@ -155,7 +159,7 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n\\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": \\\"Marketplace Product Subscription Approval PROCESSED\\\",\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": \\\"Marketplace Product Subscription Approval PROCESSED\\\",\\n        \\\"activitySubtitle\\\": \\\"The request below has been processed as \\\"+data.request.body.approvalStatus,\\n        \\\"activityImage\\\": \\\"https://i.imgur.com/Cnk4jKc.jpg\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": \\\"Product\\\",\\n            // \\\"value\\\": data.request.body.payload.consumerInstance.name\\n            \\\"value\\\": data.request.body.requestedItemName\\n        },{\\n            \\\"name\\\": \\\"Subscription\\\",\\n            \\\"value\\\": data.request.body.requestName\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": data.request.body.requestorName\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": data.request.body.requestorEmail\\n        }],\\n    }]\\n  };\\n\\n  return {url,body};\"",
+					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let summaryText;\\n  let activityTitleText;\\n  let activitySubtitleText;\\n  let requestedItemNameTitle;\\n  let requestNameTitle;\\n  \\n  if(data.request.body.kind=='Subscription') {\\n    summaryText = \\\"Marketplace Product Subscription Approval PROCESSED\\\";\\n    activityTitleText = \\\"Marketplace Product Subscription Approval PROCESSED\\\";\\n    activitySubtitleText = `The request below has been processed as ${data.request.body.approvalStatus}`;\\n    requestedItemNameTitle = \\\"Product\\\";\\n    requestNameTitle = \\\"Subscription\\\";\\n  } else {\\n    summaryText = \\\"Marketplace Asset Request Approval PROCESSED\\\";\\n    activityTitleText = \\\"Marketplace Asset Request Approval PROCESSED\\\";\\n    activitySubtitleText = `The request below has been processed as ${data.request.body.approvalStatus}`;\\n    requestedItemNameTitle = \\\"Asset\\\";\\n    requestNameTitle = \\\"Access Request\\\";\\n  }\\n\\n  let body = {\\n    \\\"@type\\\": \\\"MessageCard\\\",\\n    \\\"@context\\\": \\\"http://schema.org/extensions\\\",\\n    \\\"themeColor\\\": \\\"0076D7\\\",\\n    \\\"summary\\\": summaryText,\\n    \\\"sections\\\": [{\\n        \\\"activityTitle\\\": activityTitleText,\\n        \\\"activitySubtitle\\\": activitySubtitleText,\\n        \\\"activityImage\\\": \\\"https://i.imgur.com/Cnk4jKc.jpg\\\",\\n        \\\"markdown\\\": true,\\n        \\\"facts\\\": [{\\n            \\\"name\\\": requestedItemNameTitle,\\n            \\\"value\\\": data.request.body.requestedItemName\\n        },{\\n            \\\"name\\\": requestNameTitle,\\n            \\\"value\\\": data.request.body.requestName\\n        },{\\n            \\\"name\\\": \\\"Requestor Name\\\",\\n            \\\"value\\\": data.request.body.requestorName\\n        },{\\n            \\\"name\\\": \\\"Requestor Email\\\",\\n            \\\"value\\\": data.request.body.requestorEmail\\n        }],\\n    }]\\n  };\\n\\n  return {url,body};\"",
 					"metaName": "Code",
 					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
 				}
@@ -234,62 +238,30 @@
 			},
 			"metaMethod": "POST"
 		},
-		"javascript.4": {
-			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
-			"name": "prepareGetRequest",
-			"method": "Execute",
-			"parameters": [
-				{
-					"name": "data",
-					"type": "jsonpath",
-					"value": "$",
-					"metaName": "Data",
-					"metaDescription": "The value to apply as the `data` argument of the JavaScript code. For objects and arrays, `data` is passed by reference."
-				},
-				{
-					"name": "code",
-					"type": "string",
-					"value": "\"let url = data.request.body.selfLink;\\n   \\n   return {url};\""
-				}
-			],
-			"outputs": {
-				"next": {
-					"context": "$.result",
-					"routes": [
-						"rest.4"
-					],
-					"metaName": "Next"
-				},
-				"error": {
-					"context": "$.error",
-					"routes": [],
-					"metaName": "Error"
-				}
-			},
-			"metaMethod": "Execute"
-		},
 		"rest.4": {
 			"type": "nodehandler://@axway/api-builder-plugin-fn-restclient/rest",
 			"name": "getRequest",
 			"method": "get",
 			"parameters": [
 				{
-					"name": "url",
-					"type": "jsonpath",
-					"value": "$.result.url",
-					"metaName": "URL",
-					"metaDescription": "The target URL."
-				},
-				{
 					"name": "headers",
 					"type": "jsonpath",
-					"value": "$.getAmplifyAPIHeadersFlowResponse"
+					"value": "$.getAmplifyAPIHeadersFlowResponse",
+					"metaName": "Headers",
+					"metaDescription": "The HTTP headers to set."
+				},
+				{
+					"name": "url",
+					"type": "jsonpath",
+					"value": "$.request.body.selfLink",
+					"metaName": "URL",
+					"metaDescription": "The target URL."
 				}
 			],
 			"outputs": {
 				"2xx": {
 					"routes": [
-						"condition.1"
+						"javascript.1"
 					],
 					"context": "$.response",
 					"metaName": "2XX"
@@ -325,16 +297,12 @@
 				{
 					"name": "source",
 					"type": "jsonpath",
-					"value": "$.response.body.approval.state",
-					"metaName": "Source",
-					"metaDescription": "The input to test."
+					"value": "$.result"
 				},
 				{
 					"name": "value",
-					"type": "string",
-					"value": "\"pending\"",
-					"metaName": "Value",
-					"metaDescription": "The value to test input against."
+					"type": "boolean",
+					"value": "true"
 				}
 			],
 			"outputs": {
@@ -370,9 +338,7 @@
 				{
 					"name": "code",
 					"type": "string",
-					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let body = {\\n    text: 'SUBSCRIPTION: \\\"'+data.request.body.subscriptionName+'\\\", for PRODUCT: \\\"'+data.request.body.productName+'\\\" requested by '+data.request.body.requestorName+' ('+data.request.body.requestorEmail+') is no longer PENDING. To make any changes, please log into the Axway platform at https://platform.axway.com.'\\n  };\\n  \\n  return {url,body};\"",
-					"metaName": "Code",
-					"metaDescription": "A JavaScript function body. Supports `await` and returning promises. `data` is the value of the Data parameter. `logger` is the API Builder logger. See the docs for more info: https://docs.axway.com/bundle/api-builder/page/docs/developer_guide/flows/flow_nodes/javascript_flow_node/index.html"
+					"value": "\"let url = data.env.MS_TEAMS_WEBHOOK_URL;\\n  \\n  let requestNameTitle;\\n  let requestedItemNameTitle;\\n  \\n  if(data.request.body.kind=='Subscription') {\\n    requestNameTitle = \\\"SUBSCRIPTION\\\";\\n    requestedItemNameTitle = \\\"PRODUCT\\\";\\n  } else {\\n    requestNameTitle = \\\"ACCESS REQUEST\\\";\\n    requestedItemNameTitle = \\\"ASSET\\\";\\n  }\\n  \\n  let body = {\\n    text: `${requestNameTitle}: \\\"${data.request.body.requestName}\\\" for ${requestedItemNameTitle}: \\\"${data.request.body.requestedItemName}\\\" requested by ${data.request.body.requestorName} (${data.request.body.requestorEmail}) is no longer PENDING. To make any changes, please log into the Axway platform at https://platform.axway.com.`\\n  };\\n  \\n  return {url,body};\""
 				}
 			],
 			"outputs": {
@@ -458,7 +424,7 @@
 			"outputs": {
 				"next": {
 					"routes": [
-						"javascript.4"
+						"rest.4"
 					],
 					"context": "$.getAmplifyAPIHeadersFlowResponse",
 					"metaName": "Next"
@@ -470,6 +436,35 @@
 				}
 			},
 			"metaMethod": "Invoke Flow"
+		},
+		"javascript.1": {
+			"type": "nodehandler://@axway/api-builder-plugin-fn-javascript/javascript",
+			"name": "prepareCheckPending",
+			"method": "Execute",
+			"parameters": [
+				{
+					"name": "data",
+					"type": "jsonpath",
+					"value": "$"
+				},
+				{
+					"name": "code",
+					"type": "string",
+					"value": "\"if(data.request.body.kind==='Subscription') {\\n    return data.response.body.approval.state === \\\"pending\\\";\\n  } else {\\n    return data.response.body.approval.state.name === \\\"pending\\\";\\n  }\""
+				}
+			],
+			"outputs": {
+				"next": {
+					"context": "$.result",
+					"routes": [
+						"condition.1"
+					]
+				},
+				"error": {
+					"context": "$.error",
+					"routes": []
+				}
+			}
 		}
 	}
 }
