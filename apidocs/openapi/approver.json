@@ -82,16 +82,19 @@
                   "selfLink": {
                     "type": "string"
                   },
-                  "subscriptionName": {
+                  "requestName": {
                     "type": "string"
                   },
-                  "productName": {
+                  "requestedItemName": {
                     "type": "string"
                   },
                   "requestorName": {
                     "type": "string"
                   },
                   "requestorEmail": {
+                    "type": "string"
+                  },
+                  "kind": {
                     "type": "string"
                   }
                 }
@@ -102,10 +105,11 @@
                     "comment": "Your request was approved",
                     "approvalStatus": "approved",
                     "selfLink": "https://apicentral.axway.com/apis/catalog/v1alpha1/subscriptions/default-team-subscription-for-watchlist-2-1/approval",
-                    "subscriptionName": "Default Team - subscription for Watchlist 2 - 1",
-                    "productName": "watchlist-2",
+                    "requestName": "Default Team - subscription for Watchlist 2 - 1",
+                    "requestedItemName": "watchlist-2",
                     "requestorName": "Leor Brenman",
-                    "requestorEmail": "leor.brenman@gmail.com"
+                    "requestorEmail": "leor.brenman@gmail.com",
+                    "kind": "Subscription"
                   }
                 }
               }
