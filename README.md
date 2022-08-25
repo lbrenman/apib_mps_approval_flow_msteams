@@ -113,6 +113,64 @@ spec:
 
 > Note: You need to edit the YAML file above and set the API Builder base address and APIKey in the webhook section
 
+If you want this flow to service asset requests, configure an asset request Webhook as follows:
+
+```
+axway central create -f assetrequestapprovalworflowintegration.yaml
+```
+
+`assetrequestapprovalworflowintegration.yaml`
+
+```
+group: management
+apiVersion: v1alpha1
+kind: Integration
+title: Integrations for Asset Request Approvals
+name: integrations-for-asset-request-approvals
+spec:
+  description: This is a group of resources to be used for asset request approval workflows
+---
+group: management
+apiVersion: v1alpha1
+kind: Webhook
+title: Webhook Listener for Asset Request Approvals
+name: wh-integrations-for-asset-request-approvals
+metadata:
+  scope:
+    kind: Integration
+    name: integrations-for-asset-request-approvals
+spec:
+  enabled: true
+  url: <API Builder Base Address>/api/amplifycentralwebhookhandler
+  headers:
+      Content-Type: application/json
+      apikey: <API Key Set as Env Var>
+---
+group: management
+apiVersion: v1alpha1
+kind: ResourceHook
+title: Resource Hook for Asset Request Approvals
+name: rh-integrations-for-asset-request-approvals
+metadata:
+  scope:
+    kind: Integration
+    name: integrations-for-asset-request-approvals
+spec:
+  triggers:
+    - group: catalog
+      kind: AssetRequest
+      name: "*"
+      scope:
+        kind: Application
+        name: "*"
+      type:
+      - updated
+  webhooks:
+    - wh-integrations-for-asset-request-approvals
+```
+
+> Note: You need to edit the YAML file above and set the API Builder base address and APIKey in the webhook section
+
 The API Builder flow for `/amplifycentralwebhookhandler` is shown below:
 
 ![](https://i.imgur.com/lvLfikL.png)
